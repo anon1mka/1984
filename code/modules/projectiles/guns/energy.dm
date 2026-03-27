@@ -38,6 +38,10 @@
 	. = ..()
 	if(sibyl_mod)
 		. += span_notice("Вы видите индикаторы модуля Sibyl System.")
+		if(sibyl_mod.state == SIBSYS_STATE_SCREWDRIVER_ACT)
+			. += span_notice("Крепление модуля Sibyl System ослаблено.")
+		else if(sibyl_mod.state == SIBSYS_STATE_WELDER_ACT)
+			. += span_danger("Модуль Sibyl System поврежден.")
 
 /obj/item/gun/energy/attackby(obj/item/I, mob/user, params)
 	if(istype(I, /obj/item/gun_module/sibyl))
@@ -55,9 +59,9 @@
 			return ATTACK_CHAIN_BLOCKED_ALL
 		return ATTACK_CHAIN_PROCEED
 
-	if(sibyl_mod && istype(I, /obj/item/card/id))
+	if(sibyl_mod && is_id_card(I))
 		add_fingerprint(user)
-		sibyl_mod.toggleAuthorization(I, user)
+		sibyl_mod.toggle_authorization(I, user)
 		return ATTACK_CHAIN_PROCEED_SUCCESS
 
 	return ..()
@@ -69,35 +73,6 @@
 
 	if(sibyl_mod)
 		sibyl_mod.toggle_voice(usr)
-
-/obj/item/gun/energy/screwdriver_act(mob/living/user, obj/item/I)
-	..()
-	if(sibyl_mod && user.a_intent != INTENT_HARM)
-		sibyl_mod.screwdriver_act(user, I)
-		return
-
-/obj/item/gun/energy/welder_act(mob/living/user, obj/item/I)
-	..()
-	if(sibyl_mod && user.a_intent != INTENT_HARM)
-		sibyl_mod.welder_act(user, I)
-		return
-
-/obj/item/gun/energy/crowbar_act(mob/living/user, obj/item/I)
-	..()
-	if(sibyl_mod && user.a_intent != INTENT_HARM)
-		sibyl_mod.crowbar_act(user, I)
-		return
-
-/obj/item/gun/energy/emag_act(mob/user)
-	if(sibyl_mod && !sibyl_mod.emagged)
-		add_attack_logs(user, sibyl_mod, "emagged")
-		sibyl_mod.emagged = TRUE
-		sibyl_mod.unlock(user)
-		if(user)
-			user.visible_message(span_warning("От [src] летят искры!"), span_notice("Вы взломали [src], что привело к выключению болтов предохранителя."))
-		playsound(loc, 'sound/effects/sparks4.ogg', 30, TRUE)
-		do_sparks(5, TRUE, src)
-		return
 
 /obj/item/gun/energy/emp_act(severity)
 	cell?.use(round(cell.charge / severity))
@@ -165,8 +140,12 @@
 		update_icon()
 
 /obj/item/gun/energy/can_shoot(mob/living/user, silent = FALSE)
-	if(user && sibyl_mod && !sibyl_mod.check_auth(user))
-		return FALSE
+	if(user && sibyl_mod)
+		if(!sibyl_mod.check_auth(user))
+			return FALSE
+
+		if(!sibyl_mod.can_fire(user))
+			return FALSE
 
 	var/obj/item/ammo_casing/energy/shot = ammo_type[select]
 	. = cell.charge >= shot.e_cost
@@ -357,46 +336,6 @@
 // MARK: Sibyl System
 
 /obj/item/gun/energy/proc/install_sibyl()
-	var/obj/item/gun_module/sibyl/M = new /obj/item/gun_module/sibyl()
-	M.voice_is_enabled = FALSE
-	M.try_attach(src, null)
-
-/obj/item/gun/energy/dominator/sibyl/Initialize(mapload)
-	. = ..()
-	install_sibyl()
-
-/obj/item/gun/energy/gun/advtaser/sibyl/Initialize(mapload)
-	. = ..()
-	install_sibyl()
-
-/obj/item/gun/energy/disabler/sibyl/Initialize(mapload)
-	. = ..()
-	install_sibyl()
-
-/obj/item/gun/energy/gun/sibyl/Initialize(mapload)
-	. = ..()
-	install_sibyl()
-
-/obj/item/gun/energy/gun/mini/sibyl/Initialize(mapload)
-	. = ..()
-	install_sibyl()
-
-/obj/item/gun/energy/gun/pdw9/sibyl/Initialize(mapload)
-	. = ..()
-	install_sibyl()
-
-/obj/item/gun/energy/gun/nuclear/sibyl/Initialize(mapload)
-	. = ..()
-	install_sibyl()
-
-/obj/item/gun/energy/laser/sibyl/Initialize(mapload)
-	. = ..()
-	install_sibyl()
-
-/obj/item/gun/energy/immolator/multi/sibyl/Initialize(mapload)
-	. = ..()
-	install_sibyl()
-
-/obj/item/gun/energy/specter/sibyl/Initialize(mapload)
-	. = ..()
-	install_sibyl()
+	var/obj/item/gun_module/sibyl/module = new /obj/item/gun_module/sibyl()
+	module.voice_is_enabled = FALSE
+	module.try_attach(src, null)
