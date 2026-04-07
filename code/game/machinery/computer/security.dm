@@ -310,6 +310,15 @@
 			is_printing = TRUE
 			playsound(loc, 'sound/goonstation/machines/printer_dotmatrix.ogg', 50, TRUE)
 			addtimer(CALLBACK(src, PROC_REF(print_record_finish)), 5 SECONDS)
+
+		if("print_wanted")
+			if(!logged_in)
+				return
+			if(!record_general || !record_security)
+				set_temp("No record selected!", "danger")
+				return
+			ui_modal_input(src, "wanted_reason_input", "Укажите причину розыска для [record_general.fields["name"]]:", arguments = list())
+
 		else
 			return FALSE
 
@@ -435,6 +444,16 @@
 					is_printing = TRUE
 					playsound(loc, 'sound/goonstation/machines/printer_dotmatrix.ogg', 50, TRUE)
 					addtimer(CALLBACK(src, PROC_REF(print_cell_log_finish), T.name, T.info), 5 SECONDS)
+
+				if("wanted_reason_input")
+					if(is_printing)
+						return
+					if(!record_general || !record_security)
+						set_temp("No record selected!", "danger")
+						return
+					is_printing = TRUE
+					playsound(loc, 'sound/goonstation/machines/printer_dotmatrix.ogg', 50, TRUE)
+					addtimer(CALLBACK(src, PROC_REF(print_wanted_poster_finish), answer), 5 SECONDS)
 				else
 					return FALSE
 		else
@@ -487,6 +506,39 @@
 	var/obj/item/paper/P = new(loc)
 	P.name = name
 	P.info = info
+	is_printing = FALSE
+	SStgui.update_uis(src)
+
+/obj/machinery/computer/secure_data/proc/print_wanted_poster_finish(reason = "")
+	if(!record_general || !record_security)
+		is_printing = FALSE
+		SStgui.update_uis(src)
+		return
+
+	var/icon/person_icon
+	if(record_general.fields["photo"])
+		person_icon = icon(record_general.fields["photo"], dir = SOUTH)
+	else
+		is_printing = FALSE
+		set_temp("No photo available for this record!", "danger")
+		SStgui.update_uis(src)
+		return
+
+	var/wanted_name = record_general.fields["name"]
+
+	if(!length(reason))
+		var/crime_text = record_security.fields["mi_crim"]
+		if(crime_text && crime_text != "None")
+			reason += "[crime_text]: [record_security.fields["mi_crim_d"]]"
+		var/major_crime = record_security.fields["ma_crim"]
+		if(major_crime && major_crime != "None")
+			if(length(reason))
+				reason += "; "
+			reason += "[major_crime]: [record_security.fields["ma_crim_d"]]"
+		if(!length(reason))
+			reason = "Status: [record_security.fields["criminal"]]"
+
+	new /obj/item/poster/wanted(loc, person_icon, wanted_name, reason)
 	is_printing = FALSE
 	SStgui.update_uis(src)
 

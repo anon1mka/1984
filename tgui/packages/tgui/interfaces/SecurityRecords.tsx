@@ -351,6 +351,19 @@ const SecurityRecordsPageView = (_properties) => {
               >
                 Print Record
               </Button>
+              <Button
+                disabled={isPrinting || !security || security.empty}
+                icon={isPrinting ? 'spinner' : 'scroll'}
+                iconSpin={!!isPrinting}
+                onClick={() => act('print_wanted')}
+                tooltip={
+                  !security || security.empty
+                    ? 'No security record selected'
+                    : 'Print Wanted Poster'
+                }
+              >
+                Print Wanted
+              </Button>
               <Button.Confirm
                 icon="trash"
                 tooltip={

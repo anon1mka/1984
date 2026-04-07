@@ -201,6 +201,11 @@
 	P.transfer_fingerprints_to(D)
 	flick("poster_being_set", D)
 	D.forceMove(temp_loc)
+
+	if(istype(D, /obj/structure/sign/poster/wanted))
+		var/obj/structure/sign/poster/wanted/W = D
+		W.apply_face()
+
 	qdel(P)	//delete it now to cut down on sanity checks afterwards. Agouri's code supports rerolling it anyway
 	playsound(D.loc, 'sound/items/poster_being_created.ogg', 100, TRUE)
 
@@ -912,5 +917,79 @@
 	name = "Скромная Квартермейстерша"
 	desc = "На постере изображена скромная девушка в платье Квартирмейстера, которая сидит на том самом ящике."
 	icon_state = "poster4_secret"
+
+/obj/item/poster/wanted
+	name = "свёрнутый постер розыска"
+	desc = "Официальный постер розыска, выпущенный службой безопасности."
+	icon_state = "rolled_poster"
+	var/wanted_name = ""
+	var/wanted_reason = ""
+
+/obj/item/poster/wanted/Initialize(mapload, icon/person_icon, input_name, input_reason)
+	. = ..(mapload)
+
+	if(input_name)
+		wanted_name = input_name
+	if(input_reason)
+		wanted_reason = input_reason
+
+	if(person_icon)
+		var/obj/structure/sign/poster/wanted/structure = new(src, person_icon, wanted_name, wanted_reason)
+		poster_structure = structure
+		name = "wanted — [wanted_name]"
+		desc = "Официальный постер розыска, выпущенный службой безопасности."
+
+/obj/item/poster/wanted/get_ru_names()
+	return list(
+		NOMINATIVE = "свёрнутый постер розыска",
+		GENITIVE = "свёрнутого постера розыска",
+		DATIVE = "свёрнутому постеру розыска",
+		ACCUSATIVE = "свёрнутый постер розыска",
+		INSTRUMENTAL = "свёрнутым постером розыска",
+		PREPOSITIONAL = "свёрнутом постере розыска",
+	)
+
+/obj/structure/sign/poster/wanted
+	name = "розыск"
+	icon = 'icons/obj/contraband.dmi'
+	icon_state = "wanted_background"
+	var/person_name = ""
+	var/face_icon = null
+
+/obj/structure/sign/poster/wanted/Initialize(mapload, icon/person_icon, input_name, input_reason)
+	. = ..(mapload)
+
+	person_name = input_name || "UNKNOWN"
+
+	desc = "Официальный постер розыска, выпущенный службой безопасности.\n\n<b>Разыскивается</b>: [person_name]."
+	if(input_reason)
+		desc += "\n<b>Причина розыска:</b> [input_reason]"
+	desc += "\n\n<i>Если вы видите этого нарушителя, немедленно сообщите в службу безопасности.</i>"
+
+	name = "Постер — [person_name]"
+
+	if(person_icon)
+		var/icon/base = icon('icons/obj/contraband.dmi', "wanted_background")
+		var/icon/face = icon(person_icon, dir = SOUTH)
+		face.Shift(SOUTH, 7)
+		face.Crop(7, 4, 26, 30)
+		face.Crop(-5, -2, 26, 29)
+		base.Blend(face, ICON_OVERLAY)
+		face_icon = base
+
+/obj/structure/sign/poster/wanted/proc/apply_face()
+	if(face_icon)
+		icon = face_icon
+		face_icon = null
+
+/obj/structure/sign/poster/wanted/get_ru_names()
+	return list(
+		NOMINATIVE = "постер розыска",
+		GENITIVE = "постера розыска",
+		DATIVE = "постеру розыска",
+		ACCUSATIVE = "постер розыска",
+		INSTRUMENTAL = "постером розыска",
+		PREPOSITIONAL = "постере розыска",
+	)
 
 #undef PLACE_SPEED
