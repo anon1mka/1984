@@ -121,14 +121,14 @@
 		if(!cut)
 			balloon_alert(user, "сетка цела, чинить нечего")
 			return ATTACK_CHAIN_PROCEED
-		if(rods.get_amount() < MESHFENCE_REPAIR_COST)
-			balloon_alert(user, "нужно [MESHFENCE_REPAIR_COST] прутьев")
+		if(rods.get_amount() < 5)
+			balloon_alert(user, "нужно 5 прутьев")
 			return ATTACK_CHAIN_PROCEED
 		user.visible_message(span_notice("[user] начинает чинить [src] прутьями."),
 			span_notice("Вы начинаете чинить [src] прутьями."))
 		if(!do_after(user, 5 SECONDS, src, category = DA_CAT_TOOL))
 			return ATTACK_CHAIN_PROCEED
-		if(!rods.use(MESHFENCE_REPAIR_COST) || !cut)
+		if(!rods.use(5) || !cut)
 			return ATTACK_CHAIN_PROCEED
 		cut = FALSE
 		set_density(TRUE)
