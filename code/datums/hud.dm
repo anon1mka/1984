@@ -25,6 +25,7 @@ GLOBAL_ALIST_INIT(huds, alist(
 	ANTAG_HUD_NINJA = new/datum/atom_hud/antag/hidden(),
 	ANTAG_HUD_CHANGELING = new/datum/atom_hud/antag/hidden(),
 	ANTAG_HUD_VAMPIRE = new/datum/atom_hud/antag/hidden(),
+	ANTAG_HUD_MIND_FLAYER = new/datum/atom_hud/antag/hidden(),
 	ANTAG_HUD_ABDUCTOR = new/datum/atom_hud/antag/hidden(),
 	DATA_HUD_ABDUCTOR = new/datum/atom_hud/abductor(),
 	ANTAG_HUD_DEVIL = new/datum/atom_hud/antag/hidden(),

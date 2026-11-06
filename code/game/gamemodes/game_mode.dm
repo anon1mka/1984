@@ -82,6 +82,8 @@
 	var/list/datum/mind/pre_vampires = list()
 	/// A list containing references to the minds of soon-to-be mindflayers.
 	var/list/datum/mind/pre_mindflayers = list()
+	/// A list of all minds which have the mindflayer antag datum
+	var/list/datum/mind/mindflayers = list()
 	/// A list of all minds which have the wizard special role
 	var/list/datum/mind/wizards = list()
 	/// A list of all minds that are wizard apprentices
@@ -873,6 +875,7 @@
 	. = list()
 	. += auto_declare_completion_traitor()
 	. += auto_declare_completion_vampire()
+	. += auto_declare_completion_mindflayer()
 	. += auto_declare_completion_enthralled()
 	. += auto_declare_completion_changeling()
 	. += auto_declare_completion_wizard()

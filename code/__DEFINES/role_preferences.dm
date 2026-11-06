@@ -29,6 +29,7 @@
 #define ROLE_VOX_RAIDER "vox raider"
 #define ROLE_TRADER "trader"
 #define ROLE_VAMPIRE "vampire"
+#define ROLE_MIND_FLAYER "mindflayer"
 #define ROLE_THIEF "thief"
 #define ROLE_TERROR_SPIDER "Terror Spider"
 #define ROLE_BINGLE "Bingle"
@@ -89,6 +90,7 @@ GLOBAL_LIST_INIT(special_roles, list(
 	ROLE_TRADER, // Trader
 	ROLE_TRAITOR = /datum/game_mode/traitor, // Traitor
 	ROLE_VAMPIRE = /datum/game_mode/vampire, // Vampire
+	ROLE_MIND_FLAYER, // Mind Flayer
 	ROLE_VOX_RAIDER, // Vox raider
 	ROLE_WIZARD = /datum/game_mode/wizard, // Wizard
 	ROLE_ALIEN, // Xenomorph

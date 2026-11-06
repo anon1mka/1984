@@ -432,6 +432,7 @@ GLOBAL_LIST_INIT(turfs_without_ground, typecacheof(list(
 
 // Antag
 #define IS_CHANGELING(A) (A?.mind?.has_antag_datum(/datum/antagonist/changeling))
+#define IS_MINDFLAYER(A) (isliving(A) && A?.mind?.has_antag_datum(/datum/antagonist/mindflayer))
 
 #define is_esword(A) (istype(A, /obj/item/melee/energy/sword))
 #define is_dualsaber(A) (istype(A, /obj/item/twohanded/dualsaber))

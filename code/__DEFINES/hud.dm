@@ -115,6 +115,7 @@
 #define THOUGHTS_HUD 34
 //species hud
 #define DATA_HUD_KIDAN_PHEROMONES 34
+#define ANTAG_HUD_MIND_FLAYER 35
 
 // Notification action types
 #define NOTIFY_JUMP "jump"
