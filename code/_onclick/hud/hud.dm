@@ -23,6 +23,7 @@
 	var/atom/movable/screen/blobpwrdisplay
 	var/atom/movable/screen/blobhealthdisplay
 	var/atom/movable/screen/vampire_blood_display
+	var/atom/movable/screen/flayer_swarm_display
 	var/atom/movable/screen/ninja_energy_display
 	var/atom/movable/screen/ninja_focus_display
 	var/atom/movable/screen/wind_up_timer
@@ -157,6 +158,7 @@
 	QDEL_NULL(blobpwrdisplay)
 	QDEL_NULL(alien_plasma_display)
 	QDEL_NULL(vampire_blood_display)
+	QDEL_NULL(flayer_swarm_display)
 	QDEL_NULL(ninja_energy_display)
 	QDEL_NULL(ninja_focus_display)
 	QDEL_NULL(wind_up_timer)

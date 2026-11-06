@@ -2997,6 +2997,10 @@
 	if(!isvampire(src))
 		add_antag_datum(/datum/antagonist/vampire/free_vampire)
 
+/datum/mind/proc/make_mindflayer()
+	if(!has_antag_datum(/datum/antagonist/mindflayer))
+		add_antag_datum(/datum/antagonist/mindflayer)
+
 /datum/mind/proc/make_Wizard()
 	if(!(src in SSticker.mode.wizards))
 		SSticker.mode.wizards += src

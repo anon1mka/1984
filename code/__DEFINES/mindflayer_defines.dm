@@ -28,3 +28,6 @@
 #define FLAYER_POWER_LEVEL_FOUR 4
 
 #define FLAYER_CAPSTONE_STAGE 4
+
+/// The mindflayer will not be able to activate their abilities, or drain swarms from people.
+#define TRAIT_MINDFLAYER_NULLIFIED "flayer_nullified"

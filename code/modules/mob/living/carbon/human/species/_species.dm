@@ -609,6 +609,18 @@
 		return FALSE
 
 
+	// Mindflayer harvest code
+	var/datum/antagonist/mindflayer/flayer = user?.mind?.has_antag_datum(/datum/antagonist/mindflayer)
+	if(flayer && !flayer.harvesting && target != user && !user.get_active_hand())
+		var/obj/item/organ/internal/brain/victims_brain = target.get_int_organ(/obj/item/organ/internal/brain)
+		if(victims_brain && user.zone_selected == victims_brain.parent_organ_zone)
+			if(!flayer.check_valid_harvest(target))
+				return TRUE
+
+			flayer.handle_harvest(target)
+			add_attack_logs(user, target, "flayerdrain")
+			return TRUE
+
 	//Vampire code
 	var/datum/antagonist/vampire/vamp = user?.mind?.has_antag_datum(/datum/antagonist/vampire)
 	if(vamp && !vamp.draining && user.zone_selected == BODY_ZONE_HEAD && target != user)

@@ -47,6 +47,12 @@
 		if(life_tick == 1)
 			regenerate_icons() // Make sure the inventory updates
 
+	var/datum/antagonist/mindflayer/flayer = mind?.has_antag_datum(/datum/antagonist/mindflayer)
+	if(flayer)
+		flayer.handle_mindflayer()
+		if(life_tick == 1)
+			regenerate_icons() // Make sure the inventory updates
+
 	if(player_ghosted > 0 && stat == CONSCIOUS && job && !HAS_TRAIT(src, TRAIT_RESTRAINED))
 		handle_ghosted()
 

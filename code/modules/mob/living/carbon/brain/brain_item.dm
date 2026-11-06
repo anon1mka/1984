@@ -21,6 +21,8 @@
 	var/smart_mind = FALSE
 	/// The original body for this brain, if this valriable is null - brain can apply any body without desease.
 	var/datum/weakref/original_body = null
+	/// Mindflayer harvest compatibility: damage tracked separately from normal organ damage.
+	var/temporary_damage = 0
 
 /obj/item/organ/internal/brain/get_ru_names()
 	return alist(
@@ -35,7 +37,11 @@
 /obj/item/organ/internal/brain/Destroy()
 	QDEL_NULL(brainmob)
 	original_body = null
+	temporary_damage = 0
 	return ..()
+
+/obj/item/organ/internal/brain/proc/get_effective_damage()
+	return damage + temporary_damage
 
 /obj/item/organ/internal/brain/proc/transfer_identity(mob/living/carbon/H)
 	brainmob = new(src)

@@ -21,6 +21,7 @@ ADMIN_VERB(one_click_antag, R_SERVER|R_EVENT, "Create Antagonist", "Auto-create 
 		<a href='byond://?src=[UID()];makeAntag=13'>Make Terror Spiders</a><br>
 		<a href='byond://?src=[UID()];makeAntag=14'>Make Aliens</a><br>
 		<a href='byond://?src=[UID()];makeAntag=15'>Make Nuke Team</a><br>
+		<a href='byond://?src=[UID()];makeAntag=16'>Make Mindflayers</a><br>
 		"}
 	var/datum/browser/popup = new(usr, "oneclickantag", "One-click Antagonist", 400, 400)
 	popup.set_content(dat)
@@ -373,6 +374,32 @@ ADMIN_VERB(one_click_antag, R_SERVER|R_EVENT, "Create Antagonist", "Auto-create 
 		for(var/i = 0, i<numVampires, i++)
 			H = pick(candidates)
 			H.mind.make_vampire()
+			candidates.Remove(H)
+
+		return 1
+	return 0
+
+/datum/admins/proc/makeMindflayers()
+	var/list/mob/living/carbon/human/candidates = list()
+	var/mob/living/carbon/human/H = null
+
+	var/antnum = tgui_input_number(owner, "How many mindflayers you want to create? Enter 0 to cancel", "Amount:", 0)
+	if(!antnum || antnum <= 0)
+		return
+
+	log_admin("[key_name(owner)] tried making [antnum] mindflayers with One-Click-Antag")
+	message_admins("[key_name_admin(owner)] tried making [antnum] mindflayers with One-Click-Antag")
+
+	for(var/mob/living/carbon/human/applicant in GLOB.player_list)
+		if(CandCheck(ROLE_MIND_FLAYER, applicant))
+			candidates += applicant
+
+	if(length(candidates))
+		var/numMindflayers = min(length(candidates), antnum)
+
+		for(var/i = 0, i<numMindflayers, i++)
+			H = pick(candidates)
+			H.mind.make_mindflayer()
 			candidates.Remove(H)
 
 		return 1

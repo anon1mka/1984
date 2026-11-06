@@ -591,6 +591,8 @@ ADMIN_VERB(delay, R_SERVER, "Delay Pre-Game", "Delay the game start.", ADMIN_CAT
 		antag_list += "Abductor"
 	if(M.mind.has_antag_datum(/datum/antagonist/vampire))
 		antag_list += "Vampire"
+	if(M.mind.has_antag_datum(/datum/antagonist/mindflayer))
+		antag_list += "Mindflayer"
 	if(M.mind.has_antag_datum(/datum/antagonist/mindslave/thrall))
 		antag_list += "Vampire Thrall"
 	if(M.mind.has_antag_datum(/datum/antagonist/traitor))
